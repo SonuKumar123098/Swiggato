@@ -10,6 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartResponse {
-    double cartTotal;
-    List<MenuResponse>foodItems;
+    int cartTotal;
+    List<FoodResponse>foodItems;
 }

@@ -16,8 +16,14 @@ public class FoodItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    int requiredQuantity;
-    double totalCost;
+    String dishName;
+    double price;
+    boolean veg;
+    boolean available;
+    @Enumerated(value = EnumType.STRING)
+    FoodCategory foodCategory;
+//    int requiredQuantity;
+//    double totalCost;
 
     @ManyToOne
     @JoinColumn

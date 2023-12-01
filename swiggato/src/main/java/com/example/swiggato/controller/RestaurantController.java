@@ -18,6 +18,7 @@ public class RestaurantController {
      *
      * @param restaurantService bean of restaurantservice
      */
+    @Autowired
     public RestaurantController(RestaurantService restaurantService) {
         this.restaurantService =restaurantService;
     }
