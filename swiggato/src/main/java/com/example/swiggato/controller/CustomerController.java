@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    @Autowired
-    CustomerService customerService;//field injection
+//    @Autowired
+//    CustomerService customerService;//field injection
     /*
    Consturctor Injection ----> Always use in enterprise applications
     */
-//     final CustomerService customerService;
-//     @Autowired
-//     public CustomerController(CustomerService customerService){
-//         this.customerService=customerService;
-//     }
+     final CustomerService customerService;
+     @Autowired
+     public CustomerController(CustomerService customerService){
+         this.customerService=customerService;
+     }
     @PostMapping("/add")
     public ResponseEntity addCustomer(@RequestBody CustomerRequest customerRequest){
         CustomerResponse customerResponse=customerService.addCustomer(customerRequest);

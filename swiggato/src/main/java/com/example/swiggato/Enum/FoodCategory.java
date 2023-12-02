@@ -7,5 +7,7 @@ public enum FoodCategory {
     ITALIAN,
     DRINK,
     DESSERT,
-    SOUTH_INDIAN
+    SOUTH_INDIAN,
+    NON_VEG
+
 }

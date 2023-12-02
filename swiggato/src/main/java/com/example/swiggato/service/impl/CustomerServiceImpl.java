@@ -15,8 +15,12 @@ import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+
+    final CustomerRepository customerRepository;
     @Autowired
-    CustomerRepository customerRepository;
+    public CustomerServiceImpl(CustomerRepository customerRepository){
+        this.customerRepository=customerRepository;
+    }
     public CustomerResponse addCustomer(CustomerRequest customerRequest) {
         //dto->customer Model
         Customer customer= CustomerTransformer.CustomerRequestToCustomer(customerRequest);

@@ -29,15 +29,15 @@ public class FoodItem {
     @JoinColumn
     OrderEntity order;
 
-//    @ManyToOne
-//    @JoinColumn
-//    Restaurant restaurant;
+    @ManyToOne
+    @JoinColumn
+    Restaurant restaurant;
 
     @ManyToOne
     @JoinColumn
     Cart cart;
 
-    @ManyToOne
-    @JoinColumn
-    MenuItem menuItem;
+//    @ManyToOne
+//    @JoinColumn
+//    MenuItem menuItem;
 }

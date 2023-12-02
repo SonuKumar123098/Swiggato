@@ -1,12 +1,12 @@
 package com.example.swiggato.controller;
 
+import com.example.swiggato.dto.request.RestaurantRequest;
+import com.example.swiggato.dto.response.RestaurantResponse;
 import com.example.swiggato.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -23,6 +23,15 @@ public class RestaurantController {
         this.restaurantService =restaurantService;
     }
 
+
     @PostMapping("/add")
-    public ResponseEntity addRestaurant(@RequestBody )
+    public ResponseEntity addRestaurant(@RequestBody RestaurantRequest restaurantRequest ){
+        RestaurantResponse restaurantResponse =restaurantService.addRestaurant(restaurantRequest);
+        return new ResponseEntity(restaurantResponse, HttpStatus.ACCEPTED);
+    }
+    @PutMapping("/update/status")
+    public ResponseEntity changeOpenedStatus(@RequestParam("id") int id){
+        String message= restaurantService.changeOpenedStatus(id);
+
+    }
 }

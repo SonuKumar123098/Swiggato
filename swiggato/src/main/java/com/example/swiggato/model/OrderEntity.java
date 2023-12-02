@@ -21,7 +21,7 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     String orderId; //UUID
-    double orderTotal;
+    int orderTotal;
     @CreationTimestamp
     Date orderTime;
 

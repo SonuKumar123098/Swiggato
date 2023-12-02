@@ -32,9 +32,9 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL)
     List<OrderEntity>orderEntityList=new ArrayList<>();
 
-//    @OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL)
-//    List<FoodItem>foodItemList=new ArrayList<>();
+    @OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL)
+    List<FoodItem>availableItems=new ArrayList<>();
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-    List<MenuItem>menuItemList=new ArrayList<>();
+//    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+//    List<MenuItem>menuItemList=new ArrayList<>();
 }
