@@ -2,12 +2,15 @@ package com.example.swiggato.controller;
 
 import com.example.swiggato.dto.request.FoodRequest;
 import com.example.swiggato.dto.request.RestaurantRequest;
+import com.example.swiggato.dto.response.FoodResponse;
 import com.example.swiggato.dto.response.RestaurantResponse;
 import com.example.swiggato.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -40,5 +43,11 @@ public class RestaurantController {
         RestaurantResponse restaurantResponse=restaurantService.addFoodItemToRestaurant(foodRequest);
         return new ResponseEntity(restaurantResponse,HttpStatus.ACCEPTED);
     }
-    //get menu of a response
+    //get menu of a restaurant
+    @GetMapping("/get/menu")
+    public ResponseEntity getMenuOfRestaurant(@RequestParam("id") int id){
+        List<FoodResponse>menu=restaurantService.getMenuOfRestaurant(id);
+        return new ResponseEntity<>(menu,HttpStatus.ACCEPTED);
+    }
+
 }

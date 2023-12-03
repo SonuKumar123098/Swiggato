@@ -2,6 +2,7 @@ package com.example.swiggato.service.impl;
 
 import com.example.swiggato.dto.request.FoodRequest;
 import com.example.swiggato.dto.request.RestaurantRequest;
+import com.example.swiggato.dto.response.FoodResponse;
 import com.example.swiggato.dto.response.RestaurantResponse;
 import com.example.swiggato.exception.RestaurantNotFoundException;
 import com.example.swiggato.model.FoodItem;
@@ -14,7 +15,9 @@ import com.example.swiggato.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -67,5 +70,18 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant savedarestaurant=restaurantRepository.save(restaurant);
         //prepare response
         return RestaurantTransformer.RestaurantToRestaurantResponse(savedarestaurant);
+    }
+
+    @Override
+    public List<FoodResponse> getMenuOfRestaurant(int id) {
+        //validate restaurant id
+        if(!validationUtils.validateRestaurantId(id)){
+            throw new RestaurantNotFoundException("invalid restaurant Id!");
+        }
+        List<FoodResponse>menu=restaurantRepository.findById(id).get().getAvailableItems().stream()
+                .map(foodItem -> FoodItemTransformer.FoodItemToFoodResponse(foodItem))
+                .collect(Collectors.toList());
+        return menu;
+
     }
 }
