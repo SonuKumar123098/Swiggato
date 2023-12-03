@@ -21,6 +21,7 @@ public class FoodItem {
     boolean veg;
     boolean available;
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "food_category")
     FoodCategory foodCategory;
 //    int requiredQuantity;
 //    double totalCost;
