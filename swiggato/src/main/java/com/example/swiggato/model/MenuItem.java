@@ -8,28 +8,29 @@ import lombok.experimental.FieldDefaults;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Entity
-//@Data
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Table(name = "menu")
-//@FieldDefaults(level = AccessLevel.PRIVATE)
-//public class MenuItem {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    int id;
-//    String dishName;
-//    double price;
-//    @Enumerated(EnumType.STRING)
-//    FoodCategory foodCategory;
-//    boolean veg;
-//    boolean available;
-//
-//    @ManyToOne
-//    @JoinColumn
-//    Restaurant restaurant;
-//
-//    @OneToMany(mappedBy = "menuItem",cascade = CascadeType.ALL)
-//    List<FoodItem>foodItemList=new ArrayList<>();
-//}
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
+@Table(name = "menu_item")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class MenuItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+    String dishName;
+    double price;
+    boolean veg;
+    boolean available;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "food_category")
+    FoodCategory foodCategory;
+
+    @ManyToOne
+    @JoinColumn
+    Restaurant restaurant;
+
+    @OneToMany(mappedBy = "menu",cascade = CascadeType.ALL)
+    List<FoodItem>foodItems=new ArrayList<>();
+}

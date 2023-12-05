@@ -1,8 +1,8 @@
 package com.example.swiggato.controller;
 
-import com.example.swiggato.dto.request.FoodRequest;
+import com.example.swiggato.dto.request.MenuRequest;
 import com.example.swiggato.dto.request.RestaurantRequest;
-import com.example.swiggato.dto.response.FoodResponse;
+import com.example.swiggato.dto.response.MenuResponse;
 import com.example.swiggato.dto.response.RestaurantResponse;
 import com.example.swiggato.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,23 +31,25 @@ public class RestaurantController {
     @PostMapping("/add")
     public ResponseEntity addRestaurant(@RequestBody RestaurantRequest restaurantRequest ){
         RestaurantResponse restaurantResponse =restaurantService.addRestaurant(restaurantRequest);
-        return new ResponseEntity(restaurantResponse, HttpStatus.ACCEPTED);
+        return new ResponseEntity(restaurantResponse, HttpStatus.CREATED);
     }
     @PutMapping("/update/status")
     public ResponseEntity changeOpenedStatus(@RequestParam("id") int id){
         String message= restaurantService.changeOpenedStatus(id);
         return new ResponseEntity(message,HttpStatus.ACCEPTED);
     }
-    @PostMapping("/add/food")
-    public ResponseEntity addFoodItemToRestaurant(@RequestBody FoodRequest foodRequest){
-        RestaurantResponse restaurantResponse=restaurantService.addFoodItemToRestaurant(foodRequest);
-        return new ResponseEntity(restaurantResponse,HttpStatus.ACCEPTED);
+    @PostMapping("/add/menu")
+    public ResponseEntity addMenutemToRestaurant(@RequestBody MenuRequest menuRequest){
+        RestaurantResponse restaurantResponse=restaurantService.addMenuItemToRestaurant(menuRequest);
+        return new ResponseEntity(restaurantResponse,HttpStatus.CREATED);
     }
     //get menu of a restaurant
     @GetMapping("/get/menu")
     public ResponseEntity getMenuOfRestaurant(@RequestParam("id") int id){
-        List<FoodResponse>menu=restaurantService.getMenuOfRestaurant(id);
+        List<MenuResponse>menu=restaurantService.getMenuOfRestaurant(id);
         return new ResponseEntity<>(menu,HttpStatus.ACCEPTED);
     }
+    // give all the restaurants who have served more than 'x' number of orders
 
+    // give the restaurants which have maximum number of items in their menu and which are opened also
 }

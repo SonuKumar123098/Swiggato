@@ -11,7 +11,7 @@ import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "delivery_partners")
+@Table(name = "delivery_partner")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

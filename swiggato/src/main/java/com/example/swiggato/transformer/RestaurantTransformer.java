@@ -1,9 +1,8 @@
 package com.example.swiggato.transformer;
 
 import com.example.swiggato.dto.request.RestaurantRequest;
-import com.example.swiggato.dto.response.FoodResponse;
+import com.example.swiggato.dto.response.MenuResponse;
 import com.example.swiggato.dto.response.RestaurantResponse;
-import com.example.swiggato.model.FoodItem;
 import com.example.swiggato.model.Restaurant;
 
 import java.util.ArrayList;
@@ -25,9 +24,9 @@ public class RestaurantTransformer {
     }
     public static RestaurantResponse RestaurantToRestaurantResponse(Restaurant restaurant){
         // used stream api
-        List<FoodResponse>menu= restaurant.getAvailableItems()
+        List<MenuResponse>menu= restaurant.getAvailableItems()
                 .stream()
-                .map(foodItem -> FoodItemTransformer.FoodItemToFoodResponse(foodItem))
+                .map(menuItem -> MenuItemTransformer.MenuItemToMenuResponse(menuItem))
                 .collect(Collectors.toList());
         return RestaurantResponse.builder()
                 .contactNumber(restaurant.getContactNumber())

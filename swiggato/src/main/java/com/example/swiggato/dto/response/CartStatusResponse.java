@@ -1,15 +1,20 @@
 package com.example.swiggato.dto.response;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CartResponse {
+public class CartStatusResponse {
+    String customerName;
+    String customerAddress;
+    String customerMobile;
     int cartTotal;
-    List<FoodResponse>foodItems;
+    List<MenuResponse>foodList;
+    String restaurantName;
 }

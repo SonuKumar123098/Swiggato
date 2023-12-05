@@ -33,8 +33,6 @@ public class Restaurant {
     List<OrderEntity>orderEntityList=new ArrayList<>();
 
     @OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL)
-    List<FoodItem>availableItems=new ArrayList<>();
+    List<MenuItem>availableItems=new ArrayList<>();
 
-//    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-//    List<MenuItem>menuItemList=new ArrayList<>();
 }

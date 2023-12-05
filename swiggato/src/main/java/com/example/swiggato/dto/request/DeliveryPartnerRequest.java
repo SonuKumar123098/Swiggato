@@ -1,15 +1,16 @@
 package com.example.swiggato.dto.request;
 
+import com.example.swiggato.Enum.Gender;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FoodRequest {
-    int requiredQuantity;
-    String customerMobile;
-    int menuId;
+public class DeliveryPartnerRequest {
+    String name;
+    String mobileNo;
+    Gender gender;
 }

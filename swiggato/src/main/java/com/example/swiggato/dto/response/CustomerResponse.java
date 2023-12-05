@@ -14,5 +14,5 @@ public class CustomerResponse {
     Gender gender;
     String email;
     String address;
-    CartResponse cart;
+    int cartId;
 }
