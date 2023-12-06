@@ -3,7 +3,6 @@ package com.example.swiggato.controller;
 import com.example.swiggato.dto.request.CustomerRequest;
 import com.example.swiggato.dto.response.CustomerResponse;
 import com.example.swiggato.service.CustomerService;
-import com.example.swiggato.service.impl.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

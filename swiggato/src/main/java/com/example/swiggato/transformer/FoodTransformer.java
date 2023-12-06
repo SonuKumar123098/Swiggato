@@ -1,12 +1,10 @@
 package com.example.swiggato.transformer;
 
 import com.example.swiggato.dto.request.FoodRequest;
+import com.example.swiggato.dto.response.FoodResponse;
 import com.example.swiggato.model.Customer;
 import com.example.swiggato.model.FoodItem;
 import com.example.swiggato.model.MenuItem;
-import com.example.swiggato.repository.CustomerRepository;
-import com.example.swiggato.repository.MenuItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class FoodTransformer {
 
@@ -16,6 +14,15 @@ public class FoodTransformer {
                 .cart(customer.getCart())
                 .menu(menuItem)
                 .totalCost(foodRequest.getRequiredQuantity()*menuItem.getPrice())
+                .build();
+    }
+    public static FoodResponse FoodItemToFoodResponse(FoodItem foodItem){
+        return FoodResponse.builder()
+                .foodCategory(foodItem.getMenu().getFoodCategory())
+                .veg(foodItem.getMenu().isVeg())
+                .price(foodItem.getMenu().getPrice())
+                .dishName(foodItem.getMenu().getDishName())
+                .quantityAdded(foodItem.getRequiredQuantity())
                 .build();
     }
 }

@@ -14,7 +14,7 @@ public class CartStatusResponse {
     String customerName;
     String customerAddress;
     String customerMobile;
-    int cartTotal;
-    List<MenuResponse>foodList;
+    double cartTotal;
+    List<FoodResponse>foodList;
     String restaurantName;
 }
