@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,10 +22,10 @@ public class DeliveryPartnerController {
         this.deliveryPartnerService = deliveryPartnerService;
     }
 
-    @PostMapping("/")
-    public ResponseEntity addDeliveryPartner(DeliveryPartnerRequest deliveryPartnerRequest){
-        DeliveryPartnerResponse deliveryPartnerResponse=deliveryPartnerService.addDeliveryPartner(deliveryPartnerRequest);
-        return new ResponseEntity(deliveryPartnerResponse, HttpStatus.CREATED);
+    @PostMapping("/add")
+    public ResponseEntity addDeliveryPartner(@RequestBody DeliveryPartnerRequest deliveryPartnerRequest){
+        String message=deliveryPartnerService.addDeliveryPartner(deliveryPartnerRequest);
+        return new ResponseEntity(message, HttpStatus.CREATED);
     }
     // give delivery partner with highest number of deliveries
     // send an email to all the partners who have done less than 10 delivers

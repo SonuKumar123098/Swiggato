@@ -37,7 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public CustomerResponse findCustomerByMobile(String mobileNo)  {
         Customer customer=customerRepository.findByMobileNo(mobileNo);
-        if(customer.equals(null)){
+        if(customer==null){
             throw new CustomerNotFoundException("customer not found");
         }
         CustomerResponse customerResponse=CustomerTransformer.CustomerToCustomerResponse(customer);

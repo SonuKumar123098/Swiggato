@@ -41,7 +41,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartStatusResponse addFoodItemToCart(FoodRequest foodRequest) {
         Customer customer=customerRepository.findByMobileNo(foodRequest.getCustomerMobile());
-        if(customer.equals(null)){
+        if(customer==null){
             throw new CustomerNotFoundException("customer not found!");
         }
         Optional<MenuItem>optionalMenuItem=menuItemRepository.findById(foodRequest.getMenuId());
