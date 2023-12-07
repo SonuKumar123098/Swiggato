@@ -58,6 +58,7 @@ public class CartServiceImpl implements CartService {
         //ready to add  item to cart
         Cart cart=customer.getCart();
         FoodItem foodItem= FoodTransformer.FoodRequestToFoodItem(foodRequest,menuItem,customer);
+
         // not having item from the same restaurant
         if(cart.getFoodItems().size()!=0){
             Restaurant currRestaurant=cart.getFoodItems().get(0).getMenu().getRestaurant();
@@ -77,6 +78,7 @@ public class CartServiceImpl implements CartService {
                     foodItemRepository.deleteById(foodItem1.getId());
                 }
                 cart.getFoodItems().clear();
+                foodItem=foodItemRepository.save(foodItem);
                 cart.getFoodItems().add(foodItem);
                 cart.setCartTotal(menuItem.getPrice()*foodRequest.getRequiredQuantity());
             }else{//having item from the same restaurant
@@ -86,14 +88,25 @@ public class CartServiceImpl implements CartService {
                     if(foodItem1.getMenu().getId()==foodRequest.getMenuId()){
                         exist=true;
                         foodItem1.setRequiredQuantity(foodItem1.getRequiredQuantity()+foodRequest.getRequiredQuantity());
+                        foodItem=foodItem1;
                         break;
                     }
                 }
-                if(!exist)cart.getFoodItems().add(foodItem);
+                if(!exist) {
+
+                    cart.getFoodItems().add(foodItem);
+                }
                 cart.setCartTotal(cart.getCartTotal()+menuItem.getPrice()*foodRequest.getRequiredQuantity());
             }
+        }else{
+            //if initialy car was empty
+            foodItem=foodItemRepository.save(foodItem);
+            cart.getFoodItems().add(foodItem);
+            cart.setCartTotal(menuItem.getPrice()*foodRequest.getRequiredQuantity());
         }
         Cart savedCart=cartRepository.save(cart);
+        menuItem.getFoodItems().add(foodItem);
+        menuItemRepository.save(menuItem);
         //prepare foodresponse list
         List<FoodResponse>foodResponseList=savedCart.getFoodItems().stream()
                 .map(foodItem1 -> FoodTransformer.FoodItemToFoodResponse(foodItem1))
