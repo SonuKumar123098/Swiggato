@@ -7,6 +7,6 @@ public enum FoodCategory {
     DRINK,
     SOUTH_INDIAN,
     NON_VEG,
-    VEG
+    PURE_VEG
 
 }

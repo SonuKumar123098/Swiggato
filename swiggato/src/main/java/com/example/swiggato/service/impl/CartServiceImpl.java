@@ -17,7 +17,6 @@ import com.example.swiggato.transformer.FoodTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,81 +36,90 @@ public class CartServiceImpl implements CartService {
         this.foodItemRepository = foodItemRepository;
     }
 
-    //    final Men
     @Override
     public CartStatusResponse addFoodItemToCart(FoodRequest foodRequest) {
-        Customer customer=customerRepository.findByMobileNo(foodRequest.getCustomerMobile());
-        if(customer==null){
+        Customer customer = customerRepository.findByMobileNo(foodRequest.getCustomerMobile());
+        if (customer == null) {
             throw new CustomerNotFoundException("customer not found!");
         }
-        Optional<MenuItem>optionalMenuItem=menuItemRepository.findById(foodRequest.getMenuId());
-        if(optionalMenuItem.isEmpty()){
+        Optional<MenuItem> optionalMenuItem = menuItemRepository.findById(foodRequest.getMenuId());
+        if (optionalMenuItem.isEmpty()) {
             throw new MenuItemNotFoundException("menu does not exist");
         }
-        MenuItem menuItem=optionalMenuItem.get();
-        if(!menuItem.isAvailable()){
-            throw new MenuItemNotFoundException("menu is out of stock for Now");
+        MenuItem menuItem = optionalMenuItem.get();
+        if (!menuItem.isAvailable()) {
+            throw new MenuItemNotFoundException("Item is not available in the restaurant ");
         }
-        if(!menuItem.getRestaurant().isOpened()){
+        if (!menuItem.getRestaurant().isOpened()) {
             throw new RestaurantNotFoundException("Try later, Restaurant closed for now!");
         }
         //ready to add  item to cart
-        Cart cart=customer.getCart();
-        FoodItem foodItem= FoodTransformer.FoodRequestToFoodItem(foodRequest,menuItem,customer);
-
+        Cart cart = customer.getCart();
+//        FoodItem foodItem = FoodTransformer.FoodRequestToFoodItem(foodRequest, menuItem, customer);
         // not having item from the same restaurant
-        if(cart.getFoodItems().size()!=0){
-            Restaurant currRestaurant=cart.getFoodItems().get(0).getMenu().getRestaurant();
-            Restaurant newRestaurant=menuItem.getRestaurant();
+        if (cart.getFoodItems().size() != 0) {
+            Restaurant currRestaurant = cart.getFoodItems().get(0).getMenu().getRestaurant();
+            Restaurant newRestaurant = menuItem.getRestaurant();
 
-            if(currRestaurant.getId()!=newRestaurant.getId()){
-//                List<FoodItem>foodItems=cart.getFoodItems();
-//                for(FoodItem foodItem:foodItems){
-//                    foodItem.setCart(null);
-//                    foodItem.setOrder();
-//                }
+            if (currRestaurant.getId() != newRestaurant.getId()) {
+                List<FoodItem> foodItems = cart.getFoodItems();
+                for(FoodItem foodItem1:foodItems){
+                    foodItem1.setCart(null);
+                    foodItem1.setOrder(null);
+                    foodItem1.setMenu(null);
+                }
                 cart.setCartTotal(0);
-                // Old foof available in cart
-                List<FoodItem>foods=new ArrayList<>(cart.getFoodItems());
+                cart.getFoodItems().clear();
                 //delete food items previously present in cart
-                for(FoodItem foodItem1:foods){
+                for (FoodItem foodItem1 : foodItems) {
                     foodItemRepository.deleteById(foodItem1.getId());
                 }
-                cart.getFoodItems().clear();
-                foodItem=foodItemRepository.save(foodItem);
-                cart.getFoodItems().add(foodItem);
-                cart.setCartTotal(menuItem.getPrice()*foodRequest.getRequiredQuantity());
-            }else{//having item from the same restaurant
-                //check items already available in the cart then just increse the number of required quantity
-                boolean exist=false;
-                for(FoodItem foodItem1: cart.getFoodItems()){
-                    if(foodItem1.getMenu().getId()==foodRequest.getMenuId()){
-                        exist=true;
-                        foodItem1.setRequiredQuantity(foodItem1.getRequiredQuantity()+foodRequest.getRequiredQuantity());
-                        foodItem=foodItem1;
-                        break;
-                    }
-                }
-                if(!exist) {
-
-                    cart.getFoodItems().add(foodItem);
-                }
-                cart.setCartTotal(cart.getCartTotal()+menuItem.getPrice()*foodRequest.getRequiredQuantity());
             }
-        }else{
-            //if initialy car was empty
-            foodItem=foodItemRepository.save(foodItem);
-            cart.getFoodItems().add(foodItem);
-            cart.setCartTotal(menuItem.getPrice()*foodRequest.getRequiredQuantity());
         }
-        Cart savedCart=cartRepository.save(cart);
-        menuItem.getFoodItems().add(foodItem);
-        menuItemRepository.save(menuItem);
+        boolean exist = false;
+        FoodItem savedFoodItem = null;
+        //foodItem = foodItemRepository.save(foodItem);
+        if (cart.getFoodItems().size() != 0) {
+            for (FoodItem foodItem1 : cart.getFoodItems()) {
+                if (foodItem1.getMenu().getId() == menuItem.getId()) {
+                    savedFoodItem = foodItem1;
+                    foodItem1.setRequiredQuantity(foodItem1.getRequiredQuantity() + foodRequest.getRequiredQuantity());
+                    exist = true;
+                    break;
+                }
+            }
+        }
+        if (!exist) {
+            FoodItem foodItem = FoodTransformer.FoodRequestToFoodItem(foodRequest, menuItem);
+            savedFoodItem = foodItemRepository.save(foodItem);
+            cart.getFoodItems().add(savedFoodItem);
+            menuItem.getFoodItems().add(savedFoodItem);
+            savedFoodItem.setCart(cart);
+        }
+        cart.setCartTotal(cart.getCartTotal() + menuItem.getPrice() * foodRequest.getRequiredQuantity());
+        Cart savedCart = cartRepository.save(cart);
+//        menuItem.getFoodItems().add(foodItem);
+        MenuItem savedMenuItem = menuItemRepository.save(menuItem);
         //prepare foodresponse list
-        List<FoodResponse>foodResponseList=savedCart.getFoodItems().stream()
+        List<FoodResponse> foodResponseList = savedCart.getFoodItems().stream()
                 .map(foodItem1 -> FoodTransformer.FoodItemToFoodResponse(foodItem1))
                 .collect(Collectors.toList());
-        CartStatusResponse cartStatusResponse= CartTransformer.CartToCartStatusResponse(savedCart,foodResponseList,menuItem);
+        CartStatusResponse cartStatusResponse = CartTransformer.CartToCartStatusResponse(savedCart, foodResponseList, savedMenuItem);
         return cartStatusResponse;
     }
+
+    // having item from same restauran
+
+//        foodItem.setCart(null);
+//        foodItem.setOrder(null);
+//        foodItem.setMenuItem(null);
+
+
+//        double cartTotal=0;
+//        for(FoodItem food:cart.getFoodItems()){
+//        cartTotal+=food.getRequiredQuantity()*food.getMenuItem().getPrice();
+//        }
+//
+//        cart.setCartTotal(cartTotal);
+    // save
 }

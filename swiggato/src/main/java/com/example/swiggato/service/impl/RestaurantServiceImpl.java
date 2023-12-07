@@ -43,7 +43,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public String changeOpenedStatus(int id) {
         //check valide restaurant id
         if(!validationUtils.validateRestaurantId(id)){
-            throw new RestaurantNotFoundException("Invalid Restaurant Id");
+            throw new RestaurantNotFoundException("Something went wrong. please try again!");
         }
         Restaurant restaurant=restaurantRepository.findById(id).get();
         restaurant.setOpened(!restaurant.isOpened());
@@ -58,7 +58,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public RestaurantResponse addMenuItemToRestaurant(MenuRequest menuRequest) {
         //check restaurant is valid or not
         if(!validationUtils.validateRestaurantId(menuRequest.getRestaurantId())){
-            throw new RestaurantNotFoundException("restaurant does not exist!");
+            throw new RestaurantNotFoundException("Restaurant does not exist!!");
         }
         Restaurant restaurant=restaurantRepository.findById(menuRequest.getRestaurantId()).get();
         //prepare foood entity

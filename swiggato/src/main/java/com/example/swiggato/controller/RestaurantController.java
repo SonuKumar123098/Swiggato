@@ -35,13 +35,21 @@ public class RestaurantController {
     }
     @PutMapping("/update/status")
     public ResponseEntity changeOpenedStatus(@RequestParam("id") int id){
-        String message= restaurantService.changeOpenedStatus(id);
-        return new ResponseEntity(message,HttpStatus.ACCEPTED);
+        try{
+            String message = restaurantService.changeOpenedStatus(id);
+            return new ResponseEntity(message, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
     @PostMapping("/add/menu")
     public ResponseEntity addMenutemToRestaurant(@RequestBody MenuRequest menuRequest){
-        RestaurantResponse restaurantResponse=restaurantService.addMenuItemToRestaurant(menuRequest);
-        return new ResponseEntity(restaurantResponse,HttpStatus.CREATED);
+        try{
+            RestaurantResponse restaurantResponse = restaurantService.addMenuItemToRestaurant(menuRequest);
+            return new ResponseEntity(restaurantResponse, HttpStatus.CREATED);
+        }catch(Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
     //get menu of a restaurant
     @GetMapping("/get/menu")

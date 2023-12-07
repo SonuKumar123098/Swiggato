@@ -8,10 +8,9 @@ import com.example.swiggato.model.MenuItem;
 
 public class FoodTransformer {
 
-    public static FoodItem FoodRequestToFoodItem(FoodRequest foodRequest,MenuItem menuItem,Customer customer) {
+    public static FoodItem FoodRequestToFoodItem(FoodRequest foodRequest,MenuItem menuItem) {
         return FoodItem.builder()
                 .requiredQuantity(foodRequest.getRequiredQuantity())
-                .cart(customer.getCart())
                 .menu(menuItem)
                 .totalCost(foodRequest.getRequiredQuantity()*menuItem.getPrice())
                 .build();
