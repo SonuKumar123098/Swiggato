@@ -33,8 +33,8 @@ public class OrderEntity {
     @JoinColumn
     DeliveryPartner deliveryPartner;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
-    List<FoodItem>foodItemList=new ArrayList<>();
+    @OneToMany(mappedBy = "orderPlaced",cascade = CascadeType.ALL)
+    List<FoodItem>foodItemLists=new ArrayList<>();
 
     @ManyToOne
     @JoinColumn

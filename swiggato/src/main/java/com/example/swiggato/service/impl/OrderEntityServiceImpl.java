@@ -31,11 +31,12 @@ public class OrderEntityServiceImpl implements OrderEntityService {
 
     @Override
     public OrderResponse placeOrder(String customerMobile) {
-        //check that customer mobile is valid or not
+//        //check that customer mobile is valid or not
         Customer customer=customerRepository.findByMobileNo(customerMobile);
         if(customer==null){
             throw new CustomerNotFoundException("check your mobile number that you have entered and try again");
         }
+//        System.out.println(customer);
         Cart cart=customer.getCart();
         if(cart.getFoodItems().size()==0){
             throw new EmptyCartException("Your cart is empty!");
@@ -53,7 +54,7 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         deliveryPartner.getOrderEntityList().add(savedOrderEntity);
         // now food items is not a part of cart, update order and cart in food item
         for(FoodItem foodItem:cart.getFoodItems()){
-            foodItem.setOrder(savedOrderEntity);
+            foodItem.setOrderPlaced(savedOrderEntity);
             foodItem.setCart(null);
         }
         //clear the cart
@@ -62,7 +63,7 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         customerRepository.save(customer);
         restaurantRepository.save(restaurant);
         deliveryPartnerRepository.save(deliveryPartner);
-        // prepare order response
+//         prepare order response
         return OrderTransformer.OrderEntityToOrderResponse(savedOrderEntity);
     }
 

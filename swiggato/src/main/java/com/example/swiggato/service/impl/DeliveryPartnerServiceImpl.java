@@ -24,7 +24,7 @@ public class DeliveryPartnerServiceImpl implements DeliveryPartnerService {
     public String addDeliveryPartner(DeliveryPartnerRequest deliveryPartnerRequest) {
         // check that given mobile number is already exist or not
         DeliveryPartner deliveryPartner=deliveryPartnerRepository.findByMobileNo(deliveryPartnerRequest.getMobileNo());
-        if(deliveryPartner.equals(null)) return "Already registered, please sign in!";
+        if(deliveryPartner!=null) return "Already registered, please sign in!";
         DeliveryPartner deliveryPartner1= DeliveryPartnerTransformer.DeliveryPartnerRequestToDeliveryPartner(deliveryPartnerRequest);
         DeliveryPartner savedDeliveryPartner=deliveryPartnerRepository.save(deliveryPartner1);
         return "Your registration is successfull";

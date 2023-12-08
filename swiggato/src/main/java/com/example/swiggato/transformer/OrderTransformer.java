@@ -19,12 +19,12 @@ public class OrderTransformer {
                 .orderTotal(cart.getCartTotal())
                 .customer(customer)
                 .deliveryPartner(deliveryPartner)
-                .foodItemList(cart.getFoodItems())
+                .foodItemLists(cart.getFoodItems())
                 .restaurant(cart.getFoodItems().get(0).getMenu().getRestaurant())
                 .build();
     }
     public static OrderResponse OrderEntityToOrderResponse(OrderEntity orderEntity){
-        List<FoodResponse>foodResponses=orderEntity.getFoodItemList().stream()
+        List<FoodResponse>foodResponses=orderEntity.getFoodItemLists().stream()
                 .map(foodItem -> FoodTransformer.FoodItemToFoodResponse(foodItem))
                 .collect(Collectors.toList());
         return OrderResponse.builder()

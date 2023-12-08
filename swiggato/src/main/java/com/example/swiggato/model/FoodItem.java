@@ -29,5 +29,5 @@ public class FoodItem {
 
     @ManyToOne
     @JoinColumn
-    OrderEntity order;
+    OrderEntity orderPlaced;
 }

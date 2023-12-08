@@ -12,8 +12,10 @@ import com.example.swiggato.repository.CustomerRepository;
 import com.example.swiggato.repository.FoodItemRepository;
 import com.example.swiggato.repository.MenuItemRepository;
 import com.example.swiggato.service.CartService;
+import com.example.swiggato.service.FoodItemService;
 import com.example.swiggato.transformer.CartTransformer;
 import com.example.swiggato.transformer.FoodTransformer;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +31,14 @@ public class CartServiceImpl implements CartService {
     final FoodItemRepository foodItemRepository;
 
     @Autowired
-    public CartServiceImpl(CustomerRepository customerRepository, MenuItemRepository menuItemRepository, CartRepository cartRepository, FoodItemRepository foodItemRepository) {
+    public CartServiceImpl(CustomerRepository customerRepository, MenuItemRepository menuItemRepository, CartRepository cartRepository, FoodItemRepository foodItemRepository, FoodItemService foodItemService) {
         this.customerRepository = customerRepository;
         this.menuItemRepository = menuItemRepository;
         this.cartRepository = cartRepository;
         this.foodItemRepository = foodItemRepository;
     }
 
+    @Transactional
     @Override
     public CartStatusResponse addFoodItemToCart(FoodRequest foodRequest) {
         Customer customer = customerRepository.findByMobileNo(foodRequest.getCustomerMobile());
@@ -65,7 +68,7 @@ public class CartServiceImpl implements CartService {
                 List<FoodItem> foodItems = cart.getFoodItems();
                 for(FoodItem foodItem1:foodItems){
                     foodItem1.setCart(null);
-                    foodItem1.setOrder(null);
+                    foodItem1.setOrderPlaced(null);
                     foodItem1.setMenu(null);
                 }
                 cart.setCartTotal(0);
