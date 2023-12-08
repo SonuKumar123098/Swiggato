@@ -13,6 +13,8 @@ import com.example.swiggato.transformer.OrderTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class OrderEntityServiceImpl implements OrderEntityService {
 
@@ -31,23 +33,28 @@ public class OrderEntityServiceImpl implements OrderEntityService {
 
     @Override
     public OrderResponse placeOrder(String customerMobile) {
-//        //check that customer mobile is valid or not
+//        //verify that customer mobile is valid or not
         Customer customer=customerRepository.findByMobileNo(customerMobile);
         if(customer==null){
             throw new CustomerNotFoundException("check your mobile number that you have entered and try again");
         }
 //        System.out.println(customer);
         Cart cart=customer.getCart();
+        //verify that cart is empty or not
         if(cart.getFoodItems().size()==0){
             throw new EmptyCartException("Your cart is empty!");
         }
         //find deliveryPartner to deliver the order. Randomly
         DeliveryPartner deliveryPartner=deliveryPartnerRepository.findRandomDeliveryPartner();
         //prepare orderEntity
-        OrderEntity orderEntity= OrderTransformer.prepareOrderEntity(customer,deliveryPartner);
+        Restaurant restaurant=cart.getFoodItems().get(0).getMenu().getRestaurant();
+        OrderEntity orderEntity= OrderTransformer.prepareOrderEntity(cart);
         //place the order
         OrderEntity savedOrderEntity=orderEntityRepository.save(orderEntity);
-        Restaurant restaurant=cart.getFoodItems().get(0).getMenu().getRestaurant();
+        orderEntity.setCustomer(customer);
+        orderEntity.setDeliveryPartner(deliveryPartner);
+        orderEntity.setRestaurant(restaurant);
+        orderEntity.setFoodItemLists(cart.getFoodItems());
         //set Parent
         customer.getOrderEntityList().add(savedOrderEntity);
         restaurant.getOrderEntityList().add(savedOrderEntity);
@@ -60,15 +67,16 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         //clear the cart
         clearCart(cart);
         // save parent Entity
-        customerRepository.save(customer);
+
         restaurantRepository.save(restaurant);
         deliveryPartnerRepository.save(deliveryPartner);
+        customerRepository.save(customer);
 //         prepare order response
         return OrderTransformer.OrderEntityToOrderResponse(savedOrderEntity);
     }
 
     private void clearCart(Cart cart) {
         cart.setCartTotal(0);
-        cart.getFoodItems().clear();
+        cart.setFoodItems(new ArrayList<>());
     }
 }

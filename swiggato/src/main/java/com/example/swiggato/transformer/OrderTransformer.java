@@ -12,15 +12,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class OrderTransformer {
-    public static OrderEntity prepareOrderEntity(Customer customer, DeliveryPartner deliveryPartner){
-        Cart cart=customer.getCart();
+    public static OrderEntity prepareOrderEntity(Cart cart){
         return OrderEntity.builder()
                 .orderId(String.valueOf(UUID.randomUUID()))
                 .orderTotal(cart.getCartTotal())
-                .customer(customer)
-                .deliveryPartner(deliveryPartner)
-                .foodItemLists(cart.getFoodItems())
-                .restaurant(cart.getFoodItems().get(0).getMenu().getRestaurant())
                 .build();
     }
     public static OrderResponse OrderEntityToOrderResponse(OrderEntity orderEntity){

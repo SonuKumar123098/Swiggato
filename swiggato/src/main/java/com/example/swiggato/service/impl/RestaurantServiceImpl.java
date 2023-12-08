@@ -47,8 +47,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         Restaurant restaurant=restaurantRepository.findById(id).get();
         restaurant.setOpened(!restaurant.isOpened());
-        restaurantRepository.save(restaurant);
-        if(restaurant.isOpened()){
+        Restaurant restaurant1= restaurantRepository.save(restaurant);
+        if(restaurant1.isOpened()){
             return "restaurant opened now!";
         }
         return "restaurant closed!";
